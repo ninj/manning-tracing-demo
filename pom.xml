@@ -42,4 +42,56 @@
 			</plugin>
 		</plugins>
 	</build>
+    <profiles>
+        <profile>
+            <id>docker-build</id>
+            <activation>
+                <property>
+                    <name>!skipDockerBuild</name>
+                </property>
+            </activation>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <artifactId>maven-install-plugin</artifactId>
+                            <executions>
+                                <execution>
+                                    <id>default-install</id>
+                                    <configuration>
+                                        <skip>true</skip>
+                                    </configuration>
+                                </execution>
+                            </executions>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>3.1.1</version>
+                        <executions>
+                            <execution>
+                                <id>exec-docker-build</id>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <phase>install</phase>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <executable>docker</executable>
+                            <arguments>
+                                <argument>build</argument>
+                                <argument>-t</argument>
+                                <argument>tracing-demo:latest</argument>
+                                <argument>.</argument>
+                            </arguments>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
